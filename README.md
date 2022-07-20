@@ -1,1 +1,1 @@
-# EcommerceAutomation
+# GmailAutomation
