@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeClass;
 
@@ -45,5 +46,13 @@ public class Utils {
         WebDriverWait wait=new WebDriverWait(driver, 10L);
         wait.until(ExpectedConditions.visibilityOfElementLocated(element));
 
+    }
+
+    public void waitUntilPageLoad(WebDriver driver)
+    {
+        Wait<WebDriver> wait = new WebDriverWait(driver, 10);
+        wait.until(driver1 -> String
+                .valueOf(((JavascriptExecutor) driver1).executeScript("return document.readyState"))
+                .equals("complete"));
     }
 }

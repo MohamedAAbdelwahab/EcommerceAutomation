@@ -1,7 +1,11 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -17,6 +21,7 @@ public class Assignment1Test {
     Utils util=new Utils();
     PrintStream out = System.out;
     HomePage homePage;
+    LoginPage loginPage;
     @BeforeClass
     public void setup()
     {
@@ -55,7 +60,7 @@ public class Assignment1Test {
         Year.selectByIndex(5);
         util.scrollUntilSelector(Year);
         WebElement Email=driver.findElement(By.id("Email"));
-        Email.sendKeys("Mohamed12@test.com");
+        Email.sendKeys("Mohamed13@test.com");
         util.scrollUntil(Email);
         WebElement Company=driver.findElement(By.id("Company"));
         Company.sendKeys("fawry");
@@ -75,17 +80,54 @@ public class Assignment1Test {
         WebElement logoutBtn=driver.findElement(By.className("ico-logout"));
         logoutBtn.click();
     }
+
     @Test(priority = 2)
     public void LoginWithValidData()
     {
         util.waitUntil(driver,By.className("ico-login"));
         this.homePage.LoginHeaderBtn.click();
-        WebElement Email=driver.findElement(By.id("Email"));
-        Email.sendKeys("Mohamed12@test.com");
-        WebElement Password=driver.findElement(By.id("Password"));
-        Password.sendKeys("P@ssw0rd");
-        WebElement loginBtn=driver.findElement(By.cssSelector("button[class='button-1 login-button']"));
-        loginBtn.click();
+        this.loginPage=new LoginPage(driver);
+        this.loginPage.Email.sendKeys("Mohamed13@test.com");
+        this.loginPage.Password.sendKeys("P@ssw0rd");
+        this.loginPage.loginBtn.click();
+    }
+
+    @Test(priority = 3)
+    public void ResetPassword()
+    {
+        util.waitUntil(driver,By.className("ico-login"));
+        this.homePage.LoginHeaderBtn.click();
+        this.loginPage=new LoginPage(driver);
+        this.loginPage.forgetpassword.click();
+        WebElement emailInputField= driver.findElement(By.id("Email"));
+        emailInputField.sendKeys("Mohamed13@test.com");
+        WebElement Recover=driver.findElement(By.cssSelector("button[class='button-1 password-recovery-button']"));
+        Recover.click();
+        WebElement Notification=driver.findElement(By.cssSelector("p[class='content']"));
+        Assert.assertEquals(Notification.getText(),"Email with instructions has been sent to you.");
+    }
+    @Test(priority = 4)
+    public void SearchItem()
+    {
+        LoginWithValidData();
+        WebElement searchBar=driver.findElement(By.id("small-searchterms"));
+        searchBar.sendKeys("adidas Consortium Campus 80s Running Shoes");
+        WebElement SearchBtn=driver.findElement(By.cssSelector("button[class='button-1 search-box-button']"));
+        SearchBtn.click();
+        util.waitUntilPageLoad(driver);
+        util.scrollUntil(driver.findElement(By.cssSelector("img[alt='Picture of adidas Consortium Campus 80s Running Shoes']")));
+        Assert.assertTrue(driver.findElement(By.cssSelector("img[alt='Picture of adidas Consortium Campus 80s Running Shoes']")).isDisplayed());
+    }
+
+    @Test(priority = 5)
+    public void ChangeCurrency()
+    {
+        SearchItem();
+        Select CurrencySelector=new Select(driver.findElement(By.id("customerCurrency")));
+        CurrencySelector.selectByIndex(1);
+        util.waitUntilPageLoad(driver);
+        util.scrollUntil(driver.findElement(By.cssSelector("span[class='price actual-price']")));
+        Assert.assertTrue(driver.findElement(By.cssSelector("span[class='price actual-price']")).getText().contains("€"));
     }
 //
 //    @Test(priority = 3)
