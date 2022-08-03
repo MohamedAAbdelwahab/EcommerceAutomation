@@ -3,6 +3,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
@@ -54,5 +55,19 @@ public class Utils {
         wait.until(driver1 -> String
                 .valueOf(((JavascriptExecutor) driver1).executeScript("return document.readyState"))
                 .equals("complete"));
+    }
+
+    public void HoverOnItemAndSelectSub(WebElement element,By by)
+    {
+        //Instantiating Actions class
+        Actions actions = new Actions(driver);
+
+        actions.moveToElement(element);
+
+        WebElement subMenu = driver.findElement(by);
+
+        actions.moveToElement(subMenu);
+
+        actions.click().build().perform();
     }
 }
