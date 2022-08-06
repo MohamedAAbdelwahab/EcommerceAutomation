@@ -1,3 +1,5 @@
+package Utils;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +14,7 @@ import org.testng.annotations.BeforeClass;
 
 import java.nio.channels.Selector;
 import java.sql.Driver;
+import java.time.Duration;
 import java.util.Random;
 
 public class Utils {
@@ -19,6 +22,7 @@ public class Utils {
     String email;
     String referenceNumber;
     int index;
+
     @BeforeClass
     public WebDriver setup()
     {
@@ -27,9 +31,10 @@ public class Utils {
     }
     public void scrollUntil(WebElement element)
     {
+
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);",element);
     }
-    public void scrollUntilSelector(Select element)
+    public void scrollUntilSelector(Select element ,WebDriver driver)
     {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);",element);
     }
@@ -44,14 +49,14 @@ public class Utils {
         return salt.toString();
     }
     public void waitUntil(WebDriver driver, By element){
-        WebDriverWait wait=new WebDriverWait(driver, 10L);
+        WebDriverWait wait=new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(element));
 
     }
 
     public void waitUntilPageLoad(WebDriver driver)
     {
-        Wait<WebDriver> wait = new WebDriverWait(driver, 10);
+        Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(driver1 -> String
                 .valueOf(((JavascriptExecutor) driver1).executeScript("return document.readyState"))
                 .equals("complete"));
@@ -69,5 +74,9 @@ public class Utils {
         actions.moveToElement(subMenu);
 
         actions.click().build().perform();
+    }
+    public void setDriver(WebDriver driver)
+    {
+        this.driver=driver;
     }
 }

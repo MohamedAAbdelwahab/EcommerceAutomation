@@ -1,26 +1,22 @@
+import Utils.Utils;
+import io.cucumber.java.bs.A;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 public class Assignment1Test {
     WebDriver driver;
     Utils util=new Utils();
     PrintStream out = System.out;
     HomePage homePage;
+
     LoginPage loginPage;
     @BeforeClass
     public void setup()
@@ -52,15 +48,15 @@ public class Assignment1Test {
         Lastname.sendKeys("Abdelwahab2");
         Select Day=new Select(driver.findElement(By.name("DateOfBirthDay")));
         Day.selectByIndex(5);
-        util.scrollUntilSelector(Day);
+        util.scrollUntilSelector(Day,driver);
         Select Month=new Select(driver.findElement(By.name("DateOfBirthMonth")));
         Month.selectByIndex(5);
-        util.scrollUntilSelector(Month);
+        util.scrollUntilSelector(Month,driver);
         Select Year=new Select(driver.findElement(By.name("DateOfBirthYear")));
         Year.selectByIndex(5);
-        util.scrollUntilSelector(Year);
+        util.scrollUntilSelector(Year,driver);
         WebElement Email=driver.findElement(By.id("Email"));
-        Email.sendKeys("Mohamed14@test.com");
+        Email.sendKeys("Mohamed19@test.com");
         util.scrollUntil(Email);
         WebElement Company=driver.findElement(By.id("Company"));
         Company.sendKeys("fawry");
@@ -87,9 +83,12 @@ public class Assignment1Test {
         util.waitUntil(driver,By.className("ico-login"));
         this.homePage.LoginHeaderBtn.click();
         this.loginPage=new LoginPage(driver);
-        this.loginPage.Email.sendKeys("Mohamed14@test.com");
+        this.loginPage.Email.sendKeys("Mohamed19@test.com");
         this.loginPage.Password.sendKeys("P@ssw0rd");
         this.loginPage.loginBtn.click();
+        util.waitUntilPageLoad(driver);
+        Assert.assertEquals(driver.getCurrentUrl(),"https://demo.nopcommerce.com/");
+
     }
 
     @Test(priority = 3)
@@ -244,36 +243,7 @@ public class Assignment1Test {
         util.scrollUntil(driver.findElement(By.cssSelector("button[class='button-1 confirm-order-next-step-button']")));
         WebElement continueBtn5=driver.findElement(By.cssSelector("button[class='button-1 confirm-order-next-step-button']"));
         continueBtn5.click();
+        Assert.assertTrue(driver.findElement(By.className("order-number")).getText().contains("ORDER NUMBER"));
     }
-//
-//    @Test(priority = 3)
-//    public void ComposePage()
-//    {
-//        util.waitUntil(driver,By.cssSelector(".oj div textarea"));
-//        WebElement tofield=driver.findElement(By.cssSelector(".oj div textarea"));
-//        tofield.sendKeys("AutomationTesting12344@gmail.com");
-//        util.waitUntil(driver,By.cssSelector(".aoD.az6 input"));
-//        WebElement subjectfield=driver.findElement(By.cssSelector(".aoD.az6 input"));
-//        subjectfield.sendKeys("Test Mail");
-//        util.waitUntil(driver,By.cssSelector(".Ap .Ar.Au"));
-//        WebElement emailBody=driver.findElement(By.cssSelector(".Ap .Ar.Au div"));
-//        emailBody.sendKeys("Test Email Body");
-//        WebElement send=driver.findElement(By.cssSelector(".gU.Up .J-J5-Ji.btA .dC div"));
-//        send.click();
-//        util.waitUntil(driver,By.cssSelector(".zA.zE .apU.xY"));
-//        WebElement star=driver.findElement(By.cssSelector(".zA.zE .apU.xY"));
-//        star.click();
-//    }
-//    @Test(priority = 4)
-//    public void OpenEmail()
-//    {
-//        util.waitUntil(driver,By.cssSelector(".Cp div table tbody tr"));
-//        WebElement email=driver.findElement(By.cssSelector(".Cp div table tbody tr"));
-//        email.click();
-//        WebElement body=driver.findElement(By.xpath("//*[contains(text(), 'Test Email Body')]"));
-//        String bodystr =body.getText();
-//
-//        Assert.assertEquals(bodystr.substring(bodystr.indexOf("Test")),"Test Email Body");
-//    }
 
 }
